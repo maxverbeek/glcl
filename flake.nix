@@ -23,7 +23,11 @@
       {
         devShell = pkgs.mkShell {
           name = "devshell";
-          buildInputs = [ toolchain.default ];
+          nativeBuildInputs = [ pkgs.pkgconf ];
+          buildInputs = [
+            toolchain.default
+            pkgs.openssl
+          ];
         };
       }
     );
