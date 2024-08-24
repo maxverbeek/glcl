@@ -1,11 +1,14 @@
-use std::{collections::HashMap, env, fs, path::PathBuf};
-
 use anyhow::Result;
 use reqwest::{header::HeaderMap, Client, ClientBuilder};
 use serde::Deserialize;
+use std::{collections::HashMap, env, fs, path::PathBuf};
+use tracing::{event, info, Level};
+use tracing_subscriber;
 
 #[tokio::main]
 async fn main() -> Result<()> {
+    tracing_subscriber::fmt::init();
+
     let gl = Gitlab::try_new()?;
 
     dbg!(gl.get_projects().await);
@@ -97,6 +100,8 @@ impl Gitlab {
     ) -> Result<GetProjectsResponse> {
         let url = "https://gitlab.com/api/v4/projects";
 
+        info!(url, ?pagination_info, message = "making request to gitlab");
+
         let mut query_params = HashMap::new();
         query_params.insert("pagination", "keyset".to_owned());
         query_params.insert("order_by", "id".to_owned());
@@ -104,7 +109,7 @@ impl Gitlab {
         query_params.insert("per_page", "100".to_owned());
         query_params.insert("membership", "true".to_owned());
 
-        if let Some(pagination) = pagination_info {
+        if let Some(pagination) = &pagination_info {
             query_params.insert("id_after", pagination.id_after.to_string());
         }
 
