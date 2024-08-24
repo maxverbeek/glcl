@@ -8,6 +8,7 @@ anyhow = "1.0.86"
 parse_link_header = "0.3.3"
 reqwest = { version = "0.12.5", features = ["json"] }
 serde = { version = "1.0.205", features = ["derive"] }
+sqlx = { version = "0.8.1", features = ["sqlite"] }
 tokio = { version = "1.39.2", features = ["full"] }
 tracing = "0.1.40"
 tracing-subscriber = "0.3.18"

@@ -5,15 +5,51 @@ use std::{collections::HashMap, env, fs, path::PathBuf};
 use tracing::{event, info, Level};
 use tracing_subscriber;
 
+use crate::db::SQLiteDatabase;
+
+mod db;
+
 #[tokio::main]
 async fn main() -> Result<()> {
     tracing_subscriber::fmt::init();
 
-    let gl = Gitlab::try_new()?;
+    // let gl = Gitlab::try_new()?;
+    let mut db = SQLiteDatabase::try_new().await?;
 
-    dbg!(gl.get_projects().await);
+    // let projects = gl.get_projects().await?;
+    //
+    // db.insert_projects(
+    //     &projects
+    //         .into_iter()
+    //         .map(From::from)
+    //         .collect::<Vec<db::Project>>(),
+    // )
+    // .await?;
+
+    let readprojects = db.get_projects().await?;
+
+    dbg!(readprojects);
 
     Ok(())
+}
+
+impl From<GitlabProject> for db::Project {
+    fn from(glproject: GitlabProject) -> db::Project {
+        return db::Project {
+            id: glproject.id,
+            description: glproject.description,
+            name: glproject.name,
+            name_with_namespace: glproject.name_with_namespace,
+            path: glproject.path,
+            path_with_namespace: glproject.path_with_namespace,
+            created_at: glproject.created_at,
+            ssh_url_to_repo: glproject.ssh_url_to_repo,
+            http_url_to_repo: glproject.http_url_to_repo,
+            web_url: glproject.web_url,
+            avatar_url: glproject.avatar_url,
+            parent_avatar_url: glproject.namespace.avatar_url,
+        };
+    }
 }
 
 #[derive(Debug)]

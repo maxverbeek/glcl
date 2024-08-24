@@ -23,7 +23,10 @@
       {
         devShell = pkgs.mkShell {
           name = "devshell";
-          nativeBuildInputs = [ pkgs.pkgconf ];
+          nativeBuildInputs = [
+            pkgs.pkgconf
+            pkgs.sqlite
+          ];
           buildInputs = [
             toolchain.default
             pkgs.openssl
