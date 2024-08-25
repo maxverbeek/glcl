@@ -13,24 +13,32 @@ mod db;
 async fn main() -> Result<()> {
     tracing_subscriber::fmt::init();
 
-    // let gl = Gitlab::try_new()?;
+    let gl = Gitlab::try_new()?;
     let mut db = SQLiteDatabase::try_new().await?;
 
-    // let projects = gl.get_projects().await?;
-    //
-    // db.insert_projects(
-    //     &projects
-    //         .into_iter()
-    //         .map(From::from)
-    //         .collect::<Vec<db::Project>>(),
-    // )
-    // .await?;
+    if db.count_projects().await? == 0 {
+        let projects = gl.get_projects().await?;
+
+        db.insert_projects(
+            &projects
+                .into_iter()
+                .map(From::from)
+                .collect::<Vec<db::Project>>(),
+        )
+        .await?;
+    }
 
     let readprojects = db.get_projects().await?;
 
-    dbg!(readprojects);
+    print_web_urls(&readprojects);
 
     Ok(())
+}
+
+fn print_web_urls(projects: &[db::Project]) {
+    for project in projects {
+        println!("{}", project.web_url);
+    }
 }
 
 impl From<GitlabProject> for db::Project {
@@ -47,6 +55,7 @@ impl From<GitlabProject> for db::Project {
             http_url_to_repo: glproject.http_url_to_repo,
             web_url: glproject.web_url,
             avatar_url: glproject.avatar_url,
+            last_activity_at: glproject.last_activity_at,
             parent_avatar_url: glproject.namespace.avatar_url,
         };
     }
