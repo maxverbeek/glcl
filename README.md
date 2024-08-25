@@ -34,13 +34,12 @@ Functionality will be strictly divided between the CLI and the daemon:
 ## Progress
 
  - [x] Query (all) GitLab projects
- - [ ] Implement the example at the top of this readme
- - [ ] Cache API responses
-      - SQLite?
-      - NoSQL/JSON files on disk?
-      - SQLite with JSON cols?
-      - im mostly too lazy to implement a database schema for gitlabs API
- - [ ] Search in cache
+ - [x] Implement the example at the top of this readme simply
+ - [ ] Implement the example at the top of this readme with proper CLI tooling
+ - [x] Save API responses
+      - uses SQLite
+ - [x] Search in cache (crappy)
+ - [ ] Search in cache (good, expiration sorted out)
  - [ ] Split the application into a daemon and a CLI
  - [ ] Query (open) merge requests, and MRs assigned/ready for review
  - [ ] PAT storage & renewal
