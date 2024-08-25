@@ -99,7 +99,7 @@ impl SQLiteDatabase {
 
     pub async fn get_projects(&mut self) -> Result<Vec<Project>> {
         let rows: Vec<Project> =
-            sqlx::query_as::<_, Project>("SELECT * FROM projects ORDER BY id ASC")
+            sqlx::query_as::<_, Project>("SELECT * FROM projects ORDER BY last_activity_at ASC")
                 .fetch_all(&mut self.connection)
                 .await?;
 
