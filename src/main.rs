@@ -2,7 +2,7 @@ use anyhow::Result;
 use reqwest::{header::HeaderMap, Client, ClientBuilder};
 use serde::Deserialize;
 use std::{collections::HashMap, env, fs, path::PathBuf};
-use tracing::{event, info, Level};
+use tracing::info;
 use tracing_subscriber;
 
 use crate::db::SQLiteDatabase;
