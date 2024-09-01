@@ -11,6 +11,6 @@ pub(crate) struct Args {
 pub(crate) enum Commands {
     Migrate,
     Daemon,
-    Projects,
+    Repos,
     MergeRequests,
 }

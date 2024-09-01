@@ -21,7 +21,7 @@ async fn main() -> Result<()> {
     match args.command {
         Commands::Migrate => migrate(),
         Commands::Daemon => daemon(),
-        Commands::Projects => projects().await?,
+        Commands::Repos => projects().await?,
         Commands::MergeRequests => merge_requests(),
     }
 
