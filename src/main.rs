@@ -7,12 +7,36 @@ use tracing_subscriber;
 
 use crate::db::SQLiteDatabase;
 
+mod cli;
 mod db;
+
+use cli::{Commands, Parser};
 
 #[tokio::main]
 async fn main() -> Result<()> {
     tracing_subscriber::fmt::init();
 
+    let args = cli::Args::parse();
+
+    match args.command {
+        Commands::Migrate => migrate(),
+        Commands::Daemon => daemon(),
+        Commands::Projects => projects().await?,
+        Commands::MergeRequests => merge_requests(),
+    }
+
+    Ok(())
+}
+
+fn migrate() {
+    unimplemented!("migrations happen automatically for now");
+}
+
+fn daemon() {
+    unimplemented!();
+}
+
+async fn projects() -> Result<()> {
     let gl = Gitlab::try_new()?;
     let mut db = SQLiteDatabase::try_new().await?;
 
@@ -33,6 +57,10 @@ async fn main() -> Result<()> {
     print_web_urls(&readprojects);
 
     Ok(())
+}
+
+fn merge_requests() {
+    unimplemented!();
 }
 
 fn print_web_urls(projects: &[db::Project]) {
